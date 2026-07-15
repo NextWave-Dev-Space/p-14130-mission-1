@@ -2,6 +2,7 @@ package com
 
 const val COMMAND_EXIT = "종료"
 const val COMMAND_WRITE = "등록"
+const val COMMAND_LIST = "목록"
 
 val NO_SPECIAL_CHAR_PATTERN = Regex("^[가-힣a-zA-Z0-9\\s.,!?]+$")
 
@@ -20,6 +21,7 @@ fun main() {
         when (command) {
             COMMAND_EXIT -> return
             COMMAND_WRITE -> write()
+            COMMAND_LIST -> list()
         }
     }
 }
@@ -37,6 +39,15 @@ fun write() {
 fun generateNextId(): Int {
     lastId++
     return lastId
+}
+
+fun list() {
+    println("번호 / 작가 / 명언")
+    println("----------------------")
+
+    for (quote in quotes.asReversed()) {
+        println("${quote.id} / ${quote.author} / ${quote.content}")
+    }
 }
 
 fun readValidLine(label: String): String {
