@@ -28,10 +28,15 @@ fun write() {
     val content = readValidLine("명언")
     val author = readValidLine("작가")
 
-    lastId++
-    quotes.add(Quote(lastId, content, author))
+    val id = generateNextId()
+    quotes.add(Quote(id, content, author))
 
-    println("${lastId}번 명언이 등록되었습니다.")
+    println("${id}번 명언이 등록되었습니다.")
+}
+
+fun generateNextId(): Int {
+    lastId++
+    return lastId
 }
 
 fun readValidLine(label: String): String {
