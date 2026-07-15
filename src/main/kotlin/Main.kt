@@ -4,10 +4,11 @@ const val COMMAND_EXIT = "종료"
 const val COMMAND_WRITE = "등록"
 const val COMMAND_LIST = "목록"
 const val COMMAND_DELETE_PREFIX = "삭제?id="
+const val COMMAND_UPDATE_PREFIX = "수정?id="
 
 val NO_SPECIAL_CHAR_PATTERN = Regex("^[가-힣a-zA-Z0-9\\s.,!?]+$")
 
-data class Quote(val id: Int, val content: String, val author: String)
+data class Quote(val id: Int, var content: String, var author: String)
 
 val quotes = mutableListOf<Quote>()
 var lastId = 0
@@ -24,6 +25,7 @@ fun main() {
             command == COMMAND_WRITE -> write()
             command == COMMAND_LIST -> list()
             command.startsWith(COMMAND_DELETE_PREFIX) -> delete(command.removePrefix(COMMAND_DELETE_PREFIX))
+            command.startsWith(COMMAND_UPDATE_PREFIX) -> update(command.removePrefix(COMMAND_UPDATE_PREFIX))
         }
     }
 }
@@ -60,6 +62,22 @@ fun delete(idText: String) {
     } else {
         println("${id}번 명언은 존재하지 않습니다.")
     }
+}
+
+fun update(idText: String) {
+    val id = idText.toIntOrNull() ?: return
+    val quote = quotes.find { it.id == id }
+
+    if (quote == null) {
+        println("${id}번 명언은 존재하지 않습니다.")
+        return
+    }
+
+    println("명언(기존) : ${quote.content}")
+    quote.content = readValidLine("명언")
+
+    println("작가(기존) : ${quote.author}")
+    quote.author = readValidLine("작가")
 }
 
 fun readValidLine(label: String): String {
