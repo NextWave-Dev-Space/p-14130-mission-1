@@ -30,6 +30,8 @@ fun write() {
 
     lastId++
     quotes.add(Quote(lastId, content, author))
+
+    println("${lastId}번 명언이 등록되었습니다.")
 }
 
 fun readValidLine(label: String): String {
