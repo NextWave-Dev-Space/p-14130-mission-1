@@ -3,6 +3,7 @@ package com
 const val COMMAND_EXIT = "종료"
 const val COMMAND_WRITE = "등록"
 const val COMMAND_LIST = "목록"
+const val COMMAND_DELETE_PREFIX = "삭제?id="
 
 val NO_SPECIAL_CHAR_PATTERN = Regex("^[가-힣a-zA-Z0-9\\s.,!?]+$")
 
@@ -18,10 +19,11 @@ fun main() {
         print("명령) ")
         val command = readlnOrNull() ?: break
 
-        when (command) {
-            COMMAND_EXIT -> return
-            COMMAND_WRITE -> write()
-            COMMAND_LIST -> list()
+        when {
+            command == COMMAND_EXIT -> return
+            command == COMMAND_WRITE -> write()
+            command == COMMAND_LIST -> list()
+            command.startsWith(COMMAND_DELETE_PREFIX) -> delete(command.removePrefix(COMMAND_DELETE_PREFIX))
         }
     }
 }
@@ -47,6 +49,14 @@ fun list() {
 
     for (quote in quotes.asReversed()) {
         println("${quote.id} / ${quote.author} / ${quote.content}")
+    }
+}
+
+fun delete(idText: String) {
+    val id = idText.toIntOrNull() ?: return
+
+    if (quotes.removeIf { it.id == id }) {
+        println("${id}번 명언이 삭제되었습니다.")
     }
 }
 
