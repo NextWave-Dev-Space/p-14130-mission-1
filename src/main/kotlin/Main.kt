@@ -1,6 +1,14 @@
 package com
 
 const val COMMAND_EXIT = "종료"
+const val COMMAND_WRITE = "등록"
+
+val NO_SPECIAL_CHAR_PATTERN = Regex("^[가-힣a-zA-Z0-9\\s.,!?]+$")
+
+data class Quote(val id: Int, val content: String, val author: String)
+
+val quotes = mutableListOf<Quote>()
+var lastId = 0
 
 fun main() {
     println("== 명언 앱 ==")
@@ -11,6 +19,28 @@ fun main() {
 
         when (command) {
             COMMAND_EXIT -> return
+            COMMAND_WRITE -> write()
         }
+    }
+}
+
+fun write() {
+    val content = readValidLine("명언")
+    val author = readValidLine("작가")
+
+    lastId++
+    quotes.add(Quote(lastId, content, author))
+}
+
+fun readValidLine(label: String): String {
+    while (true) {
+        print("$label : ")
+        val input = (readlnOrNull() ?: "").trim()
+
+        if (input.isNotEmpty() && NO_SPECIAL_CHAR_PATTERN.matches(input)) {
+            return input
+        }
+
+        println("$label 에는 특수문자를 입력할 수 없습니다. 다시 입력해주세요.")
     }
 }
